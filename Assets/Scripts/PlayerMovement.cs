@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -7,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public float walkSpeed = 3.0f;
     public float runSpeed = 6.0f;
     public float gravity = -9.81f;
+    public Animator animator;
 
     [Header("Camera Look")]
     public Transform playerCamera;
@@ -16,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
     private Vector3 playerVelocity;
     private float currentSpeed;
+
 
     void Start()
     {
@@ -41,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
 
         xRotation -= mouseY * Time.deltaTime;
 
-        xRotation = Mathf.Clamp(xRotation, -45f, 90f);
+        xRotation = Mathf.Clamp(xRotation, -45f, 75f);
 
         playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
@@ -59,18 +62,29 @@ public class PlayerMovement : MonoBehaviour
         float z = Input.GetAxisRaw("Vertical");
 
         Vector3 moveDirection = transform.right * x + transform.forward * z;
-        moveDirection.Normalize();
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (moveDirection.magnitude >= 0.1f) 
         {
-            currentSpeed = runSpeed;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                currentSpeed = runSpeed;
+            }
+            else
+            {
+                currentSpeed = walkSpeed;
+            }
         }
         else
         {
-            currentSpeed = walkSpeed;
+            currentSpeed = 0;
         }
 
-        controller.Move(moveDirection * currentSpeed * Time.deltaTime);
+        controller.Move(moveDirection.normalized * currentSpeed * Time.deltaTime);
+
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", currentSpeed);
+        }
 
         playerVelocity.y += gravity * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
