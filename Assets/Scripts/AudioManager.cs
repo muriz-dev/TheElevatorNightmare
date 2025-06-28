@@ -1,37 +1,45 @@
-using System; // Diperlukan untuk Array.Find
+using System;
 using UnityEngine;
 
-// Struct ini memungkinkan kita untuk mengasosiasikan nama dengan klip audio di Inspector.
+// Struct yang sudah dimodifikasi untuk variasi
 [System.Serializable]
 public struct Sound
 {
     public string name;
-    public AudioClip clip;
+    public AudioClip[] clips; // Array untuk variasi
+
+    [Range(0f, 1f)]
+    public float volume;
+    [Range(0.5f, 1.5f)]
+    public float pitch;
+
+    [Range(0f, 0.5f)]
+    public float randomVolumeVariance;
+    [Range(0f, 0.5f)]
+    public float randomPitchVariance;
 }
 
 public class AudioManager : MonoBehaviour
 {
-    // Pola Singleton untuk akses mudah dari skrip lain
     public static AudioManager instance;
 
     [Header("Audio Sources")]
     [SerializeField] AudioSource musicSource;
     [SerializeField] AudioSource sfxSource;
-    [SerializeField] AudioSource loopingSource; // Satu source untuk semua SFX yang berulang
+    [SerializeField] AudioSource loopingSource;
 
     [Header("Audio Clips")]
     [Tooltip("Daftar semua trek musik dalam game.")]
-    public Sound[] musicSounds;
+    public Sound[] musicSounds; // Menggunakan struct Sound yang baru
     [Tooltip("Daftar semua efek suara (SFX) dalam game.")]
-    public Sound[] sfxSounds;
+    public Sound[] sfxSounds; // Menggunakan struct Sound yang baru
 
     void Awake()
     {
-        // Pengaturan Singleton
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // Agar AudioManager tidak hancur saat pindah scene
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -39,63 +47,62 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        
-    }
-
-    // Fungsi untuk memainkan musik berdasarkan nama
     public void PlayMusic(string name)
     {
-        Sound sound = Array.Find(musicSounds, sound => sound.name == name);
-
-        if (sound.clip == null)
+        // Fungsi PlayMusic bisa dimodifikasi dengan cara yang sama jika perlu variasi,
+        // tapi musik biasanya tidak butuh itu. Kita asumsikan musik hanya punya 1 klip.
+        Sound s = Array.Find(musicSounds, sound => sound.name == name);
+        if (s.clips == null || s.clips.Length == 0)
         {
             Debug.LogWarning("Music: " + name + " tidak ditemukan!");
             return;
         }
-
-        musicSource.clip = sound.clip;
-        musicSource.loop = true; // Musik biasanya berulang
+        musicSource.clip = s.clips[0]; // Ambil klip pertama untuk musik
+        musicSource.volume = s.volume;
+        musicSource.pitch = s.pitch;
+        musicSource.loop = true;
         musicSource.Play();
     }
 
-    // Fungsi untuk memainkan SFX sekali jalan (one-shot) berdasarkan nama
+    // --- FUNGSI INI YANG DIPERBARUI ---
     public void PlaySFX(string name)
     {
-        Sound sound = Array.Find(sfxSounds, sound => sound.name == name);
-
-        if (sound.clip == null)
+        Sound s = Array.Find(sfxSounds, sound => sound.name == name);
+        if (s.clips == null || s.clips.Length == 0)
         {
-            Debug.LogWarning("SFX: " + name + " tidak ditemukan!");
+            Debug.LogWarning("SFX: '" + name + "' tidak ditemukan atau tidak memiliki audio clips!");
             return;
         }
 
-        sfxSource.PlayOneShot(sound.clip);
+        AudioClip clipToPlay = s.clips[UnityEngine.Random.Range(0, s.clips.Length)];
+        
+        sfxSource.pitch = s.pitch * (1f + UnityEngine.Random.Range(-s.randomPitchVariance / 2f, s.randomPitchVariance / 2f));
+        float finalVolume = s.volume * (1f + UnityEngine.Random.Range(-s.randomVolumeVariance / 2f, s.randomVolumeVariance / 2f));
+
+        sfxSource.PlayOneShot(clipToPlay, finalVolume);
     }
 
-    // Fungsi untuk memulai SFX yang berulang (looping) berdasarkan nama
+    // Fungsi looping juga bisa diadaptasi jika diperlukan
     public void PlayLoopingSound(string name)
     {
-        // Jika suara yang sama sudah diputar, jangan lakukan apa-apa
-        if (loopingSource.isPlaying && loopingSource.clip.name == name) {
+        if (loopingSource.isPlaying && loopingSource.clip != null && loopingSource.clip.name == name) {
             return;
         }
         
-        Sound sound = Array.Find(sfxSounds, sound => sound.name == name);
-
-        if (sound.clip == null)
+        Sound s = Array.Find(sfxSounds, sound => sound.name == name);
+        if (s.clips == null || s.clips.Length == 0)
         {
             Debug.LogWarning("Looping SFX: " + name + " tidak ditemukan!");
             return;
         }
         
-        loopingSource.clip = sound.clip;
+        loopingSource.clip = s.clips[0]; // Ambil klip pertama untuk looping SFX
+        loopingSource.volume = s.volume;
+        loopingSource.pitch = s.pitch;
         loopingSource.loop = true;
         loopingSource.Play();
     }
 
-    // Fungsi untuk menghentikan SFX yang sedang berulang
     public void StopLoopingSound()
     {
         if (loopingSource.isPlaying)

@@ -435,4 +435,10 @@ MonoBehaviour:
   sfxSource: {fileID: 3356555907212822469}
   loopingSource: {fileID: 3063485512951961389}
   musicSounds: []
-  sfxSounds: []
+  sfxSounds:
+  - name: WalkFootstep
+    clips: []
+    volume: 0.7
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
