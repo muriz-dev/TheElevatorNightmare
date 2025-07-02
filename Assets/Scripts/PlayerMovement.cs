@@ -42,13 +42,13 @@ public class PlayerMovement : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
-        xRotation -= mouseY * Time.deltaTime;
+        xRotation -= mouseY;
 
         xRotation = Mathf.Clamp(xRotation, -45f, 75f);
 
         playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
-        transform.Rotate(Vector3.up * mouseX * Time.deltaTime);
+        transform.Rotate(Vector3.up * mouseX);
     }
 
     void Move()
@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 moveDirection = transform.right * x + transform.forward * z;
 
-        if (moveDirection.magnitude >= 0.1f) 
+        if (moveDirection.magnitude >= 0.1f)
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
