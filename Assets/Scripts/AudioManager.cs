@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 // Struct yang sudah dimodifikasi untuk variasi
 [System.Serializable]
@@ -33,6 +34,8 @@ public class AudioManager : MonoBehaviour
     public Sound[] musicSounds; // Menggunakan struct Sound yang baru
     [Tooltip("Daftar semua efek suara (SFX) dalam game.")]
     public Sound[] sfxSounds; // Menggunakan struct Sound yang baru
+
+    private Dictionary<string, int> sfxNextClipIndex = new Dictionary<string, int>();
 
     void Awake()
     {
@@ -74,8 +77,22 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        AudioClip clipToPlay = s.clips[UnityEngine.Random.Range(0, s.clips.Length)];
-        
+        // --- LOGIKA BARU: Pemutaran Berurutan ---
+        // Cek apakah sound ini sudah ada di dictionary, jika tidak, tambahkan.
+        if (!sfxNextClipIndex.ContainsKey(name))
+        {
+            sfxNextClipIndex.Add(name, 0);
+        }
+
+        // Ambil indeks saat ini dan pilih klip.
+        int currentIndex = sfxNextClipIndex[name];
+        AudioClip clipToPlay = s.clips[currentIndex];
+
+        // Perbarui indeks untuk pemanggilan berikutnya, kembali ke 0 jika sudah di akhir.
+        sfxNextClipIndex[name] = (currentIndex + 1) % s.clips.Length;
+        // --- AKHIR LOGIKA BARU ---
+
+        // Variasi acak pada volume dan pitch tetap dipertahankan
         sfxSource.pitch = s.pitch * (1f + UnityEngine.Random.Range(-s.randomPitchVariance / 2f, s.randomPitchVariance / 2f));
         float finalVolume = s.volume * (1f + UnityEngine.Random.Range(-s.randomVolumeVariance / 2f, s.randomVolumeVariance / 2f));
 
