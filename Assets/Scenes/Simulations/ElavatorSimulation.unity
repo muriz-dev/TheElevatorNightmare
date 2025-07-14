@@ -159,6 +159,7 @@ MonoBehaviour:
   delayAfterButtonPress: 2
   delayAfterArriveSound: 2
   buttonPressSoundName: ButtonClick
+  elevatorArriveSoundName: ElevatorArrive
 --- !u!4 &5461255
 Transform:
   m_ObjectHideFlags: 0
@@ -211,6 +212,7 @@ MonoBehaviour:
   startPointIndex: 0
   doorController: {fileID: 1968710469}
   delayAfterArriveSound: 3
+  elevatorArriveSoundName: ElevatorArrive
   movingSoundName: ElevatorRide
   MoveToNextPoint: 0
 --- !u!4 &41394220
