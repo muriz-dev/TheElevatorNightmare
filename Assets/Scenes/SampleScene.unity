@@ -157,6 +157,7 @@ MonoBehaviour:
   insideButton: {fileID: 779739920}
   delayAfterDoorCloses: 2
   delayAfterButtonPress: 2
+  delayAfterArriveSound: 2
   buttonPressSoundName: ButtonClick
 --- !u!4 &5461255
 Transform:
@@ -209,6 +210,7 @@ MonoBehaviour:
   - {fileID: 1689851150}
   startPointIndex: 0
   doorController: {fileID: 1968710469}
+  delayAfterArriveSound: 3
   movingSoundName: ElevatorRide
   MoveToNextPoint: 0
 --- !u!4 &41394220
@@ -1091,7 +1093,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.size
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[1].name
@@ -1114,6 +1116,10 @@ PrefabInstance:
       value: ButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[6].name
+      value: ElevatorArrive
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[1].pitch
       value: 1
       objectReference: {fileID: 0}
@@ -1134,6 +1140,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[6].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[0].volume
       value: 0.7
       objectReference: {fileID: 0}
@@ -1143,18 +1153,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[2].volume
-      value: 0.2
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[3].volume
-      value: 0.2
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[4].volume
-      value: 0.3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[5].volume
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[6].volume
       value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
@@ -1179,6 +1193,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[5].clips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[6].clips.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
@@ -1309,6 +1327,10 @@ PrefabInstance:
       propertyPath: sfxSounds.Array.data[5].clips.Array.data[0]
       value: 
       objectReference: {fileID: 8300000, guid: d77031a56451ee84bb08b48249a91817, type: 3}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[6].clips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 29f1807b12bc4d840a48fa15a9e8021e, type: 3}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[1].clips.Array.data[10]
       value: 

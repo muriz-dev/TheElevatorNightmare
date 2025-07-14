@@ -66,6 +66,8 @@ public class ElevatorDoor : MonoBehaviour
             if (!string.IsNullOrEmpty(openSoundName))
             {
                 AudioManager.instance.PlaySFX(openSoundName);
+
+                Debug.Log("ElevatorDoor: Putar suara 'ElevatorIntro'");
             }
         }
         else
@@ -73,6 +75,8 @@ public class ElevatorDoor : MonoBehaviour
             if (!string.IsNullOrEmpty(closeSoundName))
             {
                 AudioManager.instance.PlaySFX(closeSoundName);
+
+                Debug.Log("ElevatorDoor: Putar suara 'ElevatorOutro'");
             }
         }
         // --- AKHIR LOGIKA BARU ---

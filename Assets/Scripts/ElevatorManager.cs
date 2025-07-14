@@ -16,111 +16,120 @@ public class ElevatorManager : MonoBehaviour
     [Tooltip("Jeda waktu (dalam detik) setelah pintu tertutup sebelum elevator bergerak.")]
     [SerializeField] private float delayAfterDoorCloses = 0.5f;
 
-    // --- TAMBAHAN BARU: Jeda setelah tombol ditekan ---
     [Tooltip("Jeda waktu (dalam detik) setelah tombol ditekan sebelum pintu bereaksi. Beri nilai kecil seperti 0.3")]
     [SerializeField] private float delayAfterButtonPress = 0.3f;
+
+    // --- TAMBAHAN BARU ---
+    [Tooltip("Jeda waktu setelah suara 'arrive' diputar sebelum pintu mulai terbuka.")]
+    [SerializeField] private float delayAfterArriveSound = 0.2f;
     // --- AKHIR TAMBAHAN ---
 
 
     [Header("Efek Suara")]
     [Tooltip("Nama SFX yang diputar saat tombol ditekan.")]
     [SerializeField] private string buttonPressSoundName = "ButtonClick";
+    [Tooltip("Nama SFX yang diputar saat pintu elevator terbuka.")]
+    [SerializeField] private string elevatorArriveSoundName = "ElevatorArrive";
 
     private bool isPlayerInside = false;
-    private bool isSequenceRunning = false; // Flag untuk mencegah klik ganda
+    private bool isSequenceRunning = false;
 
-    private void Start() //
+    private void Start()
     {
-        SetButtonVisibility(insideButton, false); //
-        SetButtonVisibility(outsideButton, false); //
+        SetButtonVisibility(insideButton, false);
+        SetButtonVisibility(outsideButton, false);
     }
 
-    public void OnPlayerEntered() //
+    public void OnPlayerEntered()
     {
-        isPlayerInside = true; //
+        isPlayerInside = true;
     }
 
-    public void OnLookAtButton(GameObject button) //
+    public void OnLookAtButton(GameObject button)
     {
-        if (button == outsideButton && !isPlayerInside && !doorController.IsOpen && !doorController.IsMoving) //
+        if (button == outsideButton && !isPlayerInside && !doorController.IsOpen && !doorController.IsMoving)
         {
-            SetButtonVisibility(button, true); //
+            SetButtonVisibility(button, true);
         }
-        else if (button == insideButton && isPlayerInside && !elevatorMover.MoveToNextPoint && !doorController.IsMoving) //
+        else if (button == insideButton && isPlayerInside && !elevatorMover.MoveToNextPoint && !doorController.IsMoving)
         {
-            SetButtonVisibility(button, true); //
+            SetButtonVisibility(button, true);
         }
     }
 
-    public void OnLookAwayFromButton(GameObject button) //
+    public void OnLookAwayFromButton(GameObject button)
     {
-        SetButtonVisibility(button, false); //
+        SetButtonVisibility(button, false);
     }
 
-    // --- FUNGSI INI DIMODIFIKASI ---
-    public void OnButtonPressed(GameObject button) //
+    public void OnButtonPressed(GameObject button)
     {
-        // Mencegah pemain menekan tombol lagi jika sekuens sudah berjalan
         if (isSequenceRunning)
         {
             return;
         }
         StartCoroutine(ButtonPressedSequence(button));
     }
-
-    // --- COROUTINE BARU UNTUK MENGELOLA URUTAN AKSI ---
+    
+    // --- COROUTINE INI YANG DIMODIFIKASI ---
     private IEnumerator ButtonPressedSequence(GameObject button)
     {
         isSequenceRunning = true;
 
-        // 1. Langsung sembunyikan tombol dan putar suara
         SetButtonVisibility(button, false);
-        if (!string.IsNullOrEmpty(buttonPressSoundName)) //
+        if (!string.IsNullOrEmpty(buttonPressSoundName))
         {
-            AudioManager.instance.PlaySFX(buttonPressSoundName); //
+            AudioManager.instance.PlaySFX(buttonPressSoundName);
+
+            Debug.Log("ElevatorManager: Putar suara 'ButtonClick'");
         }
 
-        // 2. Tunggu sejenak agar suara tombol tidak tertimpa
         yield return new WaitForSeconds(delayAfterButtonPress);
 
-        // 3. Jalankan aksi pintu setelah jeda
-        if (button == outsideButton && !isPlayerInside) //
+        if (button == outsideButton && !isPlayerInside)
         {
-            doorController.OpenDoors(); //
+            // 1. Putar suara kedatangan lift
+            AudioManager.instance.PlaySFX(elevatorArriveSoundName);
+
+            Debug.Log("ElevatorManager: Putar suara 'ElevatorArrive'");
+
+            // 2. Tunggu sejenak setelah suara diputar
+            yield return new WaitForSeconds(delayAfterArriveSound);
+
+            // 3. Baru buka pintu
+            doorController.OpenDoors();
         }
-        else if (button == insideButton && isPlayerInside) //
+        else if (button == insideButton && isPlayerInside)
         {
-            StartCoroutine(CloseAndMoveSequence()); //
+            StartCoroutine(CloseAndMoveSequence());
         }
 
-        // 4. Izinkan tombol ditekan lagi
         isSequenceRunning = false;
     }
 
-    private IEnumerator CloseAndMoveSequence() //
+    private IEnumerator CloseAndMoveSequence()
     {
-        // Tombol sudah disembunyikan sebelumnya, jadi baris ini bisa dihapus jika mau
-        SetButtonVisibility(insideButton, false); //
-        doorController.CloseDoors(); //
-        yield return new WaitForSeconds(doorController.DoorMoveDuration); //
-        
-        yield return new WaitForSeconds(delayAfterDoorCloses); //
+        SetButtonVisibility(insideButton, false);
+        doorController.CloseDoors();
+        yield return new WaitForSeconds(doorController.DoorMoveDuration);
 
-        elevatorMover.MoveToNextPoint = true; //
+        yield return new WaitForSeconds(delayAfterDoorCloses);
+
+        elevatorMover.MoveToNextPoint = true;
     }
 
-    private void SetButtonVisibility(GameObject buttonParent, bool isVisible) //
+    private void SetButtonVisibility(GameObject buttonParent, bool isVisible)
     {
-        if (buttonParent != null) //
+        if (buttonParent != null)
         {
-            Transform visuals = buttonParent.transform.Find("Button"); //
-            if (visuals != null) //
+            Transform visuals = buttonParent.transform.Find("Button");
+            if (visuals != null)
             {
-                visuals.gameObject.SetActive(isVisible); //
+                visuals.gameObject.SetActive(isVisible);
             }
             else
             {
-                Debug.LogWarning("Objek 'Visuals' tidak ditemukan sebagai anak dari " + buttonParent.name); //
+                Debug.LogWarning("Objek 'Visuals' tidak ditemukan sebagai anak dari " + buttonParent.name);
             }
         }
     }
