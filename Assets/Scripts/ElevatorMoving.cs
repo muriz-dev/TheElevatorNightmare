@@ -13,21 +13,27 @@ public class PointToPointElevator : MonoBehaviour
     [SerializeField] private Transform[] pathPoints;
     [SerializeField] private int startPointIndex = 0;
 
-    // --- REFERENSI BARU ---
     [Header("Komponen Terhubung")]
     [Tooltip("Seret komponen ElevatorDoor ke sini.")]
     [SerializeField] private ElevatorDoor doorController;
+
+    // --- TAMBAHAN BARU: Nama SFX untuk gerakan ---
+    [Header("Efek Suara")]
+    [Tooltip("Nama SFX looping yang diputar saat lift bergerak.")]
+    [SerializeField] private string movingSoundName = "ElevatorMovingLoop";
 
     [Header("Kontrol Gerakan")]
     public bool MoveToNextPoint = false;
 
     private int _targetPointIndex;
     private bool _isMovingForward = true;
+    private bool _isCurrentlyMoving = false; // Variabel untuk melacak status suara
 
     public Vector3 CurrentTargetPosition => pathPoints[_targetPointIndex].position;
 
     private void Start()
     {
+        // ... (Fungsi Start tidak berubah)
         if (pathPoints == null || pathPoints.Length < 2)
         {
             Debug.LogError("Elevator memerlukan setidaknya 2 titik jalur.", this.gameObject);
@@ -39,16 +45,45 @@ public class PointToPointElevator : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!MoveToNextPoint) return;
+        // Jika lift tidak diperintahkan bergerak
+        if (!MoveToNextPoint)
+        {
+            // Pastikan suara berhenti jika lift tiba-tiba dihentikan
+            if (_isCurrentlyMoving)
+            {
+                AudioManager.instance.StopLoopingSound();
+                _isCurrentlyMoving = false;
+            }
+            return;
+        }
+
+        // --- LOGIKA BARU: Memulai suara saat pertama kali bergerak ---
+        if (!_isCurrentlyMoving)
+        {
+            if (!string.IsNullOrEmpty(movingSoundName))
+            {
+                AudioManager.instance.PlayLoopingSound(movingSoundName);
+            }
+            _isCurrentlyMoving = true;
+        }
+        // --- AKHIR LOGIKA BARU ---
 
         transform.position = Vector3.MoveTowards(transform.position, CurrentTargetPosition, moveSpeed * Time.deltaTime);
 
+        // Saat lift tiba di tujuan
         if (Vector3.Distance(transform.position, CurrentTargetPosition) < 0.01f)
         {
+            // --- LOGIKA BARU: Hentikan suara saat tiba ---
+            if (_isCurrentlyMoving)
+            {
+                AudioManager.instance.StopLoopingSound();
+                _isCurrentlyMoving = false;
+            }
+            // --- AKHIR LOGIKA BARU ---
+
             MoveToNextPoint = false;
             UpdateNextTargetIndex();
-
-            // --- LOGIKA BARU: Buka pintu saat tiba ---
+            
             if (doorController != null)
             {
                 doorController.OpenDoors();
@@ -62,6 +97,7 @@ public class PointToPointElevator : MonoBehaviour
 
     private void InitializeElevator()
     {
+        // ... (Fungsi InitializeElevator tidak berubah)
         startPointIndex = Mathf.Clamp(startPointIndex, 0, pathPoints.Length - 1);
         transform.position = pathPoints[startPointIndex].position;
         _targetPointIndex = startPointIndex;
@@ -72,6 +108,7 @@ public class PointToPointElevator : MonoBehaviour
 
     private void UpdateNextTargetIndex()
     {
+        // ... (Fungsi UpdateNextTargetIndex tidak berubah)
         if (_targetPointIndex >= pathPoints.Length - 1) _isMovingForward = false;
         else if (_targetPointIndex <= 0) _isMovingForward = true;
 
