@@ -12,12 +12,16 @@ public class ElevatorDoor : MonoBehaviour
     [SerializeField] private float openOffset = 1.2f;
     [SerializeField] private float doorMoveDuration = 1.5f;
 
+    // --- TAMBAHAN BARU: Nama SFX untuk pintu ---
+    [Header("Efek Suara")]
+    [Tooltip("Nama SFX yang akan diputar saat pintu terbuka.")]
+    [SerializeField] private string openSoundName = "ElevatorDoorOpen";
+    [Tooltip("Nama SFX yang akan diputar saat pintu tertutup.")]
+    [SerializeField] private string closeSoundName = "ElevatorDoorClose";
+    // --- AKHIR TAMBAHAN ---
+
     public float DoorMoveDuration => doorMoveDuration;
-
-    // --- PROPERTI BARU UNTUK MELACAK STATUS PINTU ---
     public bool IsOpen { get; private set; } = false;
-
-    // TAMBAHKAN PROPERTI INI
     public bool IsMoving => _isDoorMoving;
 
     private Vector3 _leftDoorClosedPosition;
@@ -28,7 +32,6 @@ public class ElevatorDoor : MonoBehaviour
     {
         if (leftDoor != null) { _leftDoorClosedPosition = leftDoor.localPosition; }
         if (rightDoor != null) { _rightDoorClosedPosition = rightDoor.localPosition; }
-        // Kondisi awal pintu adalah tertutup
         IsOpen = false;
     }
 
@@ -36,13 +39,11 @@ public class ElevatorDoor : MonoBehaviour
     {
         Vector3 leftDoorOpenPosition = _leftDoorClosedPosition + Vector3.left * openOffset;
         Vector3 rightDoorOpenPosition = _rightDoorClosedPosition + Vector3.right * openOffset;
-        // Beri tahu coroutine bahwa kita sedang membuka pintu (true)
         StartMoveDoors(leftDoorOpenPosition, rightDoorOpenPosition, true);
     }
 
     public void CloseDoors()
     {
-        // Beri tahu coroutine bahwa kita sedang menutup pintu (false)
         StartMoveDoors(_leftDoorClosedPosition, _rightDoorClosedPosition, false);
     }
 
@@ -57,6 +58,25 @@ public class ElevatorDoor : MonoBehaviour
     private IEnumerator MoveDoorsCoroutine(Vector3 leftTargetPos, Vector3 rightTargetPos, bool opens)
     {
         _isDoorMoving = true;
+
+        // --- LOGIKA BARU: Mainkan suara di sini ---
+        if (opens)
+        {
+            // Pastikan nama suara tidak kosong sebelum memutar
+            if (!string.IsNullOrEmpty(openSoundName))
+            {
+                AudioManager.instance.PlaySFX(openSoundName);
+            }
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(closeSoundName))
+            {
+                AudioManager.instance.PlaySFX(closeSoundName);
+            }
+        }
+        // --- AKHIR LOGIKA BARU ---
+
         float elapsedTime = 0f;
         Vector3 startPosLeft = leftDoor.localPosition;
         Vector3 startPosRight = rightDoor.localPosition;
@@ -73,7 +93,6 @@ public class ElevatorDoor : MonoBehaviour
         leftDoor.localPosition = leftTargetPos;
         rightDoor.localPosition = rightTargetPos;
         
-        // --- PERBARUI STATUS SETELAH GERAKAN SELESAI ---
         IsOpen = opens;
         _isDoorMoving = false;
     }
