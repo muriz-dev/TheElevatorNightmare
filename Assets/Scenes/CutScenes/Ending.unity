@@ -153,9 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textDisplay: {fileID: 843796029}
   sentences:
-  - 'Napas.
-
-'
+  - Napas. <sfx:heavybreathing>
   - 'Napas.
 
 '
@@ -169,7 +167,7 @@ MonoBehaviour:
   - 'Di baliknya... Hening.
 
 '
-  - '*Menaiki tangga darurat'
+  - '*Menaiki anak tangga <sfx:onstairs>'
   - 'Aku berhasil.
 
 '
@@ -184,7 +182,11 @@ MonoBehaviour:
   typingSpeed: 0.05
   sentenceDelay: 3
   defaultTypingSoundName: TypeWriter
-  soundTags: []
+  soundTags:
+  - tag: heavybreathing
+    soundName: HeavyBreathing
+  - tag: onstairs
+    soundName: FootstepsOnStairs
 --- !u!4 &18437893
 Transform:
   m_ObjectHideFlags: 0
@@ -211,7 +213,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.size
-      value: 10
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[7].name
@@ -226,6 +228,14 @@ PrefabInstance:
       value: OpenYourEyes
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[10].name
+      value: HeavyBreathing
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[11].name
+      value: FootstepsOnStairs
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[7].pitch
       value: 1
       objectReference: {fileID: 0}
@@ -235,6 +245,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[9].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[10].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[11].pitch
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
@@ -250,6 +268,14 @@ PrefabInstance:
       value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[10].volume
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[11].volume
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[7].clips.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -259,6 +285,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[9].clips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[10].clips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[11].clips.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
@@ -273,6 +307,14 @@ PrefabInstance:
       propertyPath: sfxSounds.Array.data[9].clips.Array.data[0]
       value: 
       objectReference: {fileID: 8300000, guid: c06b5e82797798649a7cdcc6b48352ef, type: 3}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[10].clips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 1791666ebf87ca14db15ed7cd6de63ae, type: 3}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[11].clips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 879aa6a06ad779b4b9c7befaa9771069, type: 3}
     - target: {fileID: 7238134628729214262, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.9512987
