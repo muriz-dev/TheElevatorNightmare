@@ -85,6 +85,10 @@ public class ElevatorManager : MonoBehaviour
             if (!string.IsNullOrEmpty(buttonPressSoundName))
             {
                 AudioManager.instance.PlaySFX(buttonPressSoundName);
+
+                yield return new WaitForSeconds(delayAfterButtonPress);
+
+                AudioManager.instance.PlaySFX("ElevatorError");
             }
 
             // Keluar dari coroutine agar tidak ada aksi lebih lanjut (pintu tidak tertutup, lift tidak bergerak).

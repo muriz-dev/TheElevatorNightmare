@@ -111,6 +111,11 @@ public class PointToPointElevator : MonoBehaviour
             // Tetap buka pintu agar pemain bisa keluar.
             if (doorController != null)
             {
+                AudioManager.instance.PlaySFX(elevatorArriveSoundName);
+                Debug.Log("PointToPointElevator: Putar suara 'ElevatorArrive'");
+
+                yield return new WaitForSeconds(delayAfterArriveSound);
+
                 doorController.OpenDoors();
             }
 

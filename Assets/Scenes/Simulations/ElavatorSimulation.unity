@@ -1110,7 +1110,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.size
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[1].name
@@ -1137,6 +1137,10 @@ PrefabInstance:
       value: ElevatorArrive
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[7].name
+      value: ElevatorError
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[1].pitch
       value: 1
       objectReference: {fileID: 0}
@@ -1158,6 +1162,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[6].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[7].pitch
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
@@ -1189,6 +1197,10 @@ PrefabInstance:
       value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[7].volume
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[0].clips.Array.size
       value: 9
       objectReference: {fileID: 0}
@@ -1214,6 +1226,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[6].clips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[7].clips.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
@@ -1349,6 +1365,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 29f1807b12bc4d840a48fa15a9e8021e, type: 3}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
+      propertyPath: sfxSounds.Array.data[7].clips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: e78c05117485d554b8435743c89f7684, type: 3}
+    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[1].clips.Array.data[10]
       value: 
       objectReference: {fileID: 8300000, guid: cd1a7536478353440a6730149d006b54, type: 3}
@@ -1374,7 +1394,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: f67635b5d786aea4ab00901ab974618e, type: 3}
     - target: {fileID: 7238134628729214262, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.9512987
+      value: -2.63
       objectReference: {fileID: 0}
     - target: {fileID: 7238134628729214262, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1382,7 +1402,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7238134628729214262, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.132889
+      value: -31.48
       objectReference: {fileID: 0}
     - target: {fileID: 7238134628729214262, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2147,7 +2167,7 @@ MonoBehaviour:
   leftDoor: {fileID: 2631375679075912101}
   rightDoor: {fileID: 1070969214653482383}
   openOffset: 0.8
-  doorMoveDuration: 3.8
+  doorMoveDuration: 3.9
   openSoundName: ElevatorIntro
   closeSoundName: ElevatorOutro
 --- !u!4 &1968710470
