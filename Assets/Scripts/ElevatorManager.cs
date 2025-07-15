@@ -70,33 +70,43 @@ public class ElevatorManager : MonoBehaviour
         }
         StartCoroutine(ButtonPressedSequence(button));
     }
-    
-    // --- COROUTINE INI YANG DIMODIFIKASI ---
+
     private IEnumerator ButtonPressedSequence(GameObject button)
     {
         isSequenceRunning = true;
 
+        // --- LOGIKA BARU: INTERUPSI JIKA LIFT RUSAK ---
+        if (elevatorMover != null && elevatorMover.IsBroken && button == insideButton)
+        {
+            Debug.Log("Tombol ditekan, tetapi lift rusak. Memutar suara feedback.");
+
+            // Mainkan suara feedback bahwa tombol ditekan tapi gagal.
+            // Anda bisa membuat SFX baru bernama "ButtonFail" atau "ElevatorError" untuk pengalaman yang lebih baik.
+            if (!string.IsNullOrEmpty(buttonPressSoundName))
+            {
+                AudioManager.instance.PlaySFX(buttonPressSoundName);
+            }
+
+            // Keluar dari coroutine agar tidak ada aksi lebih lanjut (pintu tidak tertutup, lift tidak bergerak).
+            isSequenceRunning = false;
+            yield break;
+        }
+        // --- AKHIR LOGIKA BARU ---
+
+
+        // Jika lift TIDAK rusak, jalankan logika normal seperti sebelumnya.
         SetButtonVisibility(button, false);
         if (!string.IsNullOrEmpty(buttonPressSoundName))
         {
             AudioManager.instance.PlaySFX(buttonPressSoundName);
-
-            Debug.Log("ElevatorManager: Putar suara 'ButtonClick'");
         }
 
         yield return new WaitForSeconds(delayAfterButtonPress);
 
         if (button == outsideButton && !isPlayerInside)
         {
-            // 1. Putar suara kedatangan lift
             AudioManager.instance.PlaySFX(elevatorArriveSoundName);
-
-            Debug.Log("ElevatorManager: Putar suara 'ElevatorArrive'");
-
-            // 2. Tunggu sejenak setelah suara diputar
             yield return new WaitForSeconds(delayAfterArriveSound);
-
-            // 3. Baru buka pintu
             doorController.OpenDoors();
         }
         else if (button == insideButton && isPlayerInside)

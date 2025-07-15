@@ -14,6 +14,10 @@ public class PointToPointElevator : MonoBehaviour
     [SerializeField] private Transform[] pathPoints;
     [SerializeField] private int startPointIndex = 0;
 
+    [Header("Pengaturan Kerusakan")]
+    [Tooltip("Indeks titik jalur (lantai) di mana elevator akan berhenti berfungsi. Isi -1 jika tidak ada lantai yang rusak.")]
+    [SerializeField] private int brokenFloorIndex = -1;
+
     [Header("Komponen Terhubung")]
     [Tooltip("Seret komponen ElevatorDoor ke sini.")]
     [SerializeField] private ElevatorDoor doorController;
@@ -32,6 +36,8 @@ public class PointToPointElevator : MonoBehaviour
     private int _targetPointIndex;
     private bool _isMovingForward = true;
     private bool _isCurrentlyMoving = false;
+
+    public bool IsBroken { get; private set; } = false;
 
     public Vector3 CurrentTargetPosition => pathPoints[_targetPointIndex].position;
 
@@ -69,7 +75,7 @@ public class PointToPointElevator : MonoBehaviour
             }
             _isCurrentlyMoving = true;
         }
-        
+
         transform.position = Vector3.MoveTowards(transform.position, CurrentTargetPosition, moveSpeed * Time.deltaTime);
 
         if (Vector3.Distance(transform.position, CurrentTargetPosition) < 0.01f)
@@ -88,17 +94,40 @@ public class PointToPointElevator : MonoBehaviour
             _isCurrentlyMoving = false;
         }
 
+        // Ambil indeks titik yang baru saja dicapai SEBELUM menentukan target berikutnya.
+        // Variabel _targetPointIndex saat ini masih menunjuk ke tujuan yang baru saja kita capai.
+        int arrivedAtIndex = _targetPointIndex;
+
+        // --- LOGIKA BARU: Cek apakah ini lantai yang rusak ---
+        if (brokenFloorIndex != -1 && arrivedAtIndex == brokenFloorIndex)
+        {
+            Debug.Log("Elevator tiba di lantai rusak (" + arrivedAtIndex + "). Operasi dihentikan.");
+
+            // Disarankan: Putar suara 'listrik mati' atau 'sabotase' di sini.
+            // AudioManager.instance.PlaySFX("ElevatorBrokeSound");
+
+            IsBroken = true; 
+
+            // Tetap buka pintu agar pemain bisa keluar.
+            if (doorController != null)
+            {
+                doorController.OpenDoors();
+            }
+
+            // Hentikan coroutine di sini. Lift tidak akan bisa bergerak lagi karena
+            // kita tidak memanggil UpdateNextTargetIndex().
+            yield break;
+        }
+        // --- AKHIR LOGIKA BARU ---
+
+        // Jika bukan lantai yang rusak, lanjutkan seperti biasa.
         UpdateNextTargetIndex();
 
-        // 1. Putar suara kedatangan
         AudioManager.instance.PlaySFX(elevatorArriveSoundName);
-
         Debug.Log("PointToPointElevator: Putar suara 'ElevatorArrive'");
 
-        // 2. Tunggu sejenak
         yield return new WaitForSeconds(delayAfterArriveSound);
 
-        // 3. Buka pintu
         if (doorController != null)
         {
             doorController.OpenDoors();

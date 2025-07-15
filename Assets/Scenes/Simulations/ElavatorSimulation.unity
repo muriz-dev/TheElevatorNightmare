@@ -264,6 +264,7 @@ MonoBehaviour:
   - {fileID: 1349415690}
   - {fileID: 39496164}
   startPointIndex: 0
+  brokenFloorIndex: 1
   doorController: {fileID: 1968710469}
   delayAfterArriveSound: 3
   elevatorArriveSoundName: ElevatorArrive
@@ -665,7 +666,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 1.6
-  m_Radius: 0.32195663
+  m_Radius: 0.45302963
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.0001
