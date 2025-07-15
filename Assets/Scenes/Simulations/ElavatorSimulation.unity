@@ -1161,10 +1161,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
-      propertyPath: sfxSounds.Array.data[0].volume
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[1].volume
       value: 0.7
       objectReference: {fileID: 0}
@@ -1297,42 +1293,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: c36ef3cf94aa4a945897fec3b6a5fefe, type: 3}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
-      propertyPath: sfxSounds.Array.data[2].clips.Array.data[1]
-      value: 
-      objectReference: {fileID: 8300000, guid: 790289328083d57438bb96e9fc746198, type: 3}
-    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
-      propertyPath: sfxSounds.Array.data[2].clips.Array.data[2]
-      value: 
-      objectReference: {fileID: 8300000, guid: 6eb8bddd06d85fb48b08b2b59346a39f, type: 3}
-    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
-      propertyPath: sfxSounds.Array.data[2].clips.Array.data[3]
-      value: 
-      objectReference: {fileID: 8300000, guid: 5836bf32484ce444ea3b090f0fffc4ba, type: 3}
-    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
-      propertyPath: sfxSounds.Array.data[2].clips.Array.data[4]
-      value: 
-      objectReference: {fileID: 8300000, guid: 680e64aaadf4df44ead88d0baa01c6e3, type: 3}
-    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
-      propertyPath: sfxSounds.Array.data[2].clips.Array.data[5]
-      value: 
-      objectReference: {fileID: 8300000, guid: 06d33081a59938e4eab3d6e519571dd5, type: 3}
-    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
-      propertyPath: sfxSounds.Array.data[2].clips.Array.data[6]
-      value: 
-      objectReference: {fileID: 8300000, guid: 83deca37ed5a2f64390226c399d8822a, type: 3}
-    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
-      propertyPath: sfxSounds.Array.data[2].clips.Array.data[7]
-      value: 
-      objectReference: {fileID: 8300000, guid: 71a180cabb75e304e8fb013957491f0c, type: 3}
-    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
-      propertyPath: sfxSounds.Array.data[2].clips.Array.data[8]
-      value: 
-      objectReference: {fileID: 8300000, guid: 983850d57ad47d84cae5fea475008b6f, type: 3}
-    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
-      propertyPath: sfxSounds.Array.data[2].clips.Array.data[9]
-      value: 
-      objectReference: {fileID: 8300000, guid: afe37c1d8d83c6448b0e731761120816, type: 3}
-    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[3].clips.Array.data[0]
       value: 
       objectReference: {fileID: 8300000, guid: 0a6f66843d65e0441862aa8638be6e9d, type: 3}
@@ -1358,18 +1318,6 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 2a57d83d60c141b41bb7d5197f16596d, type: 3}
     - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
       propertyPath: sfxSounds.Array.data[1].clips.Array.data[12]
-      value: 
-      objectReference: {fileID: 8300000, guid: f67635b5d786aea4ab00901ab974618e, type: 3}
-    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
-      propertyPath: sfxSounds.Array.data[2].clips.Array.data[10]
-      value: 
-      objectReference: {fileID: 8300000, guid: cd1a7536478353440a6730149d006b54, type: 3}
-    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
-      propertyPath: sfxSounds.Array.data[2].clips.Array.data[11]
-      value: 
-      objectReference: {fileID: 8300000, guid: cd1a7536478353440a6730149d006b54, type: 3}
-    - target: {fileID: 4759262775560583156, guid: cabf0491767bb474d924266556f9bf51, type: 3}
-      propertyPath: sfxSounds.Array.data[2].clips.Array.data[12]
       value: 
       objectReference: {fileID: 8300000, guid: f67635b5d786aea4ab00901ab974618e, type: 3}
     - target: {fileID: 7238134628729214262, guid: cabf0491767bb474d924266556f9bf51, type: 3}
