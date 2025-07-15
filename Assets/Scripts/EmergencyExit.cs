@@ -5,9 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class EmergencyExit : MonoBehaviour
 {
+    public string endingSceneName;
+
     private void ExitGame()
     {
-        SceneManager.LoadScene("Ending");
+        SceneManager.LoadScene(endingSceneName);
     }
 
     void OnTriggerEnter(Collider other)
