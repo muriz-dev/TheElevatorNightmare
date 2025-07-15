@@ -505,3 +505,24 @@ MonoBehaviour:
     pitch: 1
     randomVolumeVariance: 0
     randomPitchVariance: 0
+  - name: DoorHallOpen
+    clips:
+    - {fileID: 8300000, guid: cc37c08c8ce22db43904180434b94350, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
+  - name: TypeWriter
+    clips:
+    - {fileID: 8300000, guid: 0940cfdc29858514f9d5fc74eeb3c8e3, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
+  - name: OpenYourEyes
+    clips:
+    - {fileID: 8300000, guid: c06b5e82797798649a7cdcc6b48352ef, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
