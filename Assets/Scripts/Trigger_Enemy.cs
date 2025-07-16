@@ -22,6 +22,9 @@ public class Trigger_Enemy : MonoBehaviour
             Debug.Log("Player entered the trigger zone.");
             mAnimator.SetTrigger("TrStop");
             gameOverPanel.SetActive(true);
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 }
 

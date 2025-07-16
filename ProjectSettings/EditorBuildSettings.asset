@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CutScenes/Ending.unity
     guid: 06455626d4a913142b7a1c60fd3e2e1e
+  - enabled: 1
+    path: Assets/Scenes/Simulations/EnemnyChased.unity
+    guid: a07fc59fa739b22499a6da06e8eb5759
   m_configObjects: {}
