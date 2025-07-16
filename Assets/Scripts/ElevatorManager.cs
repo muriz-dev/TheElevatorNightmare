@@ -13,82 +13,73 @@ public class ElevatorManager : MonoBehaviour
     [SerializeField] private GameObject insideButton;
 
     [Header("Pengaturan Waktu")]
-    [Tooltip("Jeda waktu (dalam detik) setelah pintu tertutup sebelum elevator bergerak.")]
     [SerializeField] private float delayAfterDoorCloses = 0.5f;
-    [Tooltip("Jeda waktu (dalam detik) setelah tombol ditekan sebelum pintu bereaksi. Beri nilai kecil seperti 0.3")]
     [SerializeField] private float delayAfterButtonPress = 0.3f;
-    [Tooltip("Jeda waktu setelah suara 'arrive' diputar sebelum pintu mulai terbuka.")]
     [SerializeField] private float delayAfterArriveSound = 0.2f;
     
     [Header("Efek Suara")]
-    [Tooltip("Nama SFX yang diputar saat tombol ditekan.")]
     [SerializeField] private string buttonPressSoundName = "ButtonClick";
-    [Tooltip("Nama SFX yang diputar saat pintu elevator terbuka.")]
     [SerializeField] private string elevatorArriveSoundName = "ElevatorArrive";
 
+    // --- PERUBAHAN: PENGATURAN JUMPSCARE MENJADI LEBIH RAPI ---
     [Header("Pengaturan Jumpscare")]
+    [Tooltip("Centang ini jika elevator ini memiliki fitur jumpscare.")]
+    [SerializeField] private bool isJumpscareElevator = false;
+
     [Tooltip("Indeks lantai (dimulai dari 0) di mana jumpscare akan terjadi.")]
-    [SerializeField] private int jumpscareFloorIndex = 3; 
-    [Tooltip("Seret objek makhluk jumpscare ke sini.")]
-    [SerializeField] private JumpscareCreature jumpscareCreature;
-    [Tooltip("Nama SFX yang akan diputar saat jumpscare terjadi.")]
-    [SerializeField] private string jumpscareSoundName = "MonsterScream";
+    [SerializeField] private int jumpscareFloorIndex = 0; 
     
-    // --- VARIABEL BARU ---
-    [Tooltip("Jeda waktu (dalam detik) setelah pemain melihat makhluk sebelum pintu tertutup.")]
+    [Tooltip("Seret objek makhluk jumpscare DARI DALAM PREFAB INI ke sini.")]
+    [SerializeField] private JumpscareCreature jumpscareCreature;
+    
+    [SerializeField] private string jumpscareSoundName = "MonsterScream";
     [SerializeField] private float delayAfterJumpscare = 2f;
 
     private bool isPlayerInside = false;
     private bool isSequenceRunning = false;
     private bool isWaitingForJumpscareLook = false;
 
-
     private void Start()
     {
         SetButtonVisibility(insideButton, false);
         SetButtonVisibility(outsideButton, false);
-        if (jumpscareCreature != null)
+        
+        // Hanya proses objek creature jika ini adalah elevator jumpscare dan referensinya ada
+        if (isJumpscareElevator && jumpscareCreature != null)
         {
             jumpscareCreature.gameObject.SetActive(false);
         }
     }
-
-    // --- FUNGSI INI DIMODIFIKASI ---
-    /// <summary>
-    /// Fungsi ini sekarang memanggil coroutine baru yang memiliki jeda.
-    /// </summary>
+    
     public void OnJumpscareTriggered()
     {
-        if (!isWaitingForJumpscareLook) return;
+        // Tambahkan pengaman: hanya berjalan jika ini elevator jumpscare dan sedang menunggu
+        if (!isJumpscareElevator || !isWaitingForJumpscareLook) return;
 
         isWaitingForJumpscareLook = false;
-        
-        // Memulai sekuens setelah jumpscare, yang berisi delay
         StartCoroutine(JumpscareAftermathSequence());
     }
     
-    // --- COROUTINE BARU ---
-    /// <summary>
-    /// Coroutine ini menangani apa yang terjadi setelah pemain melihat makhluk.
-    /// </summary>
     private IEnumerator JumpscareAftermathSequence()
     {
-        // Beri jeda waktu untuk menambah ketegangan. Makhluk masih terlihat.
         yield return new WaitForSeconds(delayAfterJumpscare);
 
-        // Sembunyikan kembali makhluknya setelah jeda selesai
         // if (jumpscareCreature != null)
         // {
         //     jumpscareCreature.gameObject.SetActive(false);
         // }
-
-        // Mulai urutan menutup pintu dan bergerak
+        
         StartCoroutine(CloseAndMoveSequence());
     }
 
     public void OnPlayerEntered()
     {
         isPlayerInside = true;
+    }
+
+    public void OnPlayerExited()
+    {
+        isPlayerInside = false;
     }
 
     public void OnLookAtButton(GameObject button)
@@ -130,7 +121,7 @@ public class ElevatorManager : MonoBehaviour
             isSequenceRunning = false;
             yield break;
         }
-        
+
         SetButtonVisibility(button, false);
         if (!string.IsNullOrEmpty(buttonPressSoundName))
         {
@@ -138,7 +129,9 @@ public class ElevatorManager : MonoBehaviour
         }
         yield return new WaitForSeconds(delayAfterButtonPress);
 
-        if (button == insideButton && isPlayerInside && elevatorMover.CurrentFloorIndex == jumpscareFloorIndex)
+        // --- PERUBAHAN: LOGIKA JUMPSCARE DIBUNGKUS DENGAN "SAKLAR" ---
+        // Cek jika ini adalah elevator jumpscare SEBELUM memeriksa kondisi lainnya
+        if (isJumpscareElevator && button == insideButton && isPlayerInside && elevatorMover.CurrentFloorIndex == jumpscareFloorIndex)
         {
             if (jumpscareCreature != null)
             {
@@ -150,6 +143,7 @@ public class ElevatorManager : MonoBehaviour
             }
         }
         
+        // Jika bukan elevator jumpscare atau kondisinya tidak terpenuhi, jalankan alur normal
         if (button == outsideButton && !isPlayerInside)
         {
             AudioManager.instance.PlaySFX(elevatorArriveSoundName);

@@ -10,15 +10,16 @@ public class PlayerInteraction : MonoBehaviour
     [Header("Pengaturan Interaksi")]
     [SerializeField] private float interactionDistance = 5f;
 
-    // Referensi ke manager pusat
-    [SerializeField] private ElevatorManager elevatorManager;
+    // --- DIHAPUS ---
+    // [SerializeField] private ElevatorManager elevatorManager; 
 
     private GameObject _lastLookedAtButton = null;
+    // --- VARIABEL BARU ---
+    private ElevatorManager _lastManager = null;
 
     private void Update()
     {
-        if (elevatorManager == null) return;
-
+        // Tidak perlu lagi 'if (elevatorManager == null) return;'
         HandleLook();
         HandleClick();
     }
@@ -28,57 +29,59 @@ public class PlayerInteraction : MonoBehaviour
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         RaycastHit hitInfo;
         GameObject currentLookedAtButton = null;
-        
+        ElevatorManager currentManager = null; // Variabel sementara
+
         bool didHit = Physics.Raycast(ray, out hitInfo, interactionDistance);
 
         if (didHit)
         {
             Debug.DrawRay(ray.origin, ray.direction * hitInfo.distance, Color.green);
 
-            // Cek apakah objek yang dilihat punya tag "ElevatorInteract"
             if (hitInfo.collider.CompareTag("ElevatorInteract"))
             {
                 currentLookedAtButton = hitInfo.collider.gameObject;
+                // --- LOGIKA BARU: Ambil manager dari tombol ---
+                currentManager = currentLookedAtButton.GetComponentInParent<ElevatorManager>();
             }
             else if (hitInfo.collider.CompareTag("JumpscareCreature"))
             {
-                // Jika kita melihat makhluk, coba panggil fungsinya
                 JumpscareCreature creature = hitInfo.collider.GetComponent<JumpscareCreature>();
                 if (creature != null)
                 {
-                    // Panggil fungsi pada makhluk, yang kemudian akan memberi tahu ElevatorManager
                     creature.OnPlayerLook();
                 }
             }
-            // --- LOGIKA BARU SELESAI ---
         }
         else
         {
             Debug.DrawRay(ray.origin, ray.direction * interactionDistance, Color.red);
         }
-        
-        // Logika untuk tombol tidak berubah
+
         if (currentLookedAtButton != _lastLookedAtButton)
         {
-            if (_lastLookedAtButton != null)
+            // Beri tahu manager LAMA kita berhenti melihat tombol lama
+            if (_lastLookedAtButton != null && _lastManager != null)
             {
-                elevatorManager.OnLookAwayFromButton(_lastLookedAtButton);
+                _lastManager.OnLookAwayFromButton(_lastLookedAtButton);
             }
 
-            if (currentLookedAtButton != null)
+            // Beri tahu manager BARU kita sekarang melihat tombol baru
+            if (currentLookedAtButton != null && currentManager != null)
             {
-                elevatorManager.OnLookAtButton(currentLookedAtButton);
+                currentManager.OnLookAtButton(currentLookedAtButton);
             }
 
             _lastLookedAtButton = currentLookedAtButton;
+            _lastManager = currentManager; // Simpan manager yang baru
         }
     }
 
     private void HandleClick()
     {
-        if (Input.GetMouseButtonDown(0) && _lastLookedAtButton != null)
+        // Jika kita klik saat sedang melihat sebuah tombol dan managernya ada
+        if (Input.GetMouseButtonDown(0) && _lastLookedAtButton != null && _lastManager != null)
         {
-            elevatorManager.OnButtonPressed(_lastLookedAtButton);
+            _lastManager.OnButtonPressed(_lastLookedAtButton);
         }
     }
 }
