@@ -526,3 +526,24 @@ MonoBehaviour:
     pitch: 1
     randomVolumeVariance: 0
     randomPitchVariance: 0
+  - name: HeavyBreathing
+    clips:
+    - {fileID: 8300000, guid: 1791666ebf87ca14db15ed7cd6de63ae, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
+  - name: FootstepsOnStairs
+    clips:
+    - {fileID: 8300000, guid: 879aa6a06ad779b4b9c7befaa9771069, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
+  - name: ElevatorError
+    clips:
+    - {fileID: 8300000, guid: e78c05117485d554b8435743c89f7684, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
