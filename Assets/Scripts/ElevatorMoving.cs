@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections; // Diperlukan untuk Coroutine
 
 /// <summary>
 /// Menggerakkan platform dari satu titik ke titik berikutnya berdasarkan perintah eksternal.
@@ -13,12 +14,19 @@ public class PointToPointElevator : MonoBehaviour
     [SerializeField] private Transform[] pathPoints;
     [SerializeField] private int startPointIndex = 0;
 
+    [Header("Pengaturan Kerusakan")]
+    [Tooltip("Indeks titik jalur (lantai) di mana elevator akan berhenti berfungsi. Isi -1 jika tidak ada lantai yang rusak.")]
+    [SerializeField] private int brokenFloorIndex = -1;
+
     [Header("Komponen Terhubung")]
     [Tooltip("Seret komponen ElevatorDoor ke sini.")]
     [SerializeField] private ElevatorDoor doorController;
 
-    // --- TAMBAHAN BARU: Nama SFX untuk gerakan ---
-    [Header("Efek Suara")]
+    [Header("Pengaturan Waktu & Suara")]
+    [Tooltip("Jeda setelah suara 'arrive' diputar sebelum pintu terbuka otomatis.")]
+    [SerializeField] private float delayAfterArriveSound = 0.2f;
+    [Tooltip("Nama SFX yang diputar saat pintu elevator terbuka.")]
+    [SerializeField] private string elevatorArriveSoundName = "ElevatorArrive";
     [Tooltip("Nama SFX looping yang diputar saat lift bergerak.")]
     [SerializeField] private string movingSoundName = "ElevatorMovingLoop";
 
@@ -27,13 +35,14 @@ public class PointToPointElevator : MonoBehaviour
 
     private int _targetPointIndex;
     private bool _isMovingForward = true;
-    private bool _isCurrentlyMoving = false; // Variabel untuk melacak status suara
+    private bool _isCurrentlyMoving = false;
+
+    public bool IsBroken { get; private set; } = false;
 
     public Vector3 CurrentTargetPosition => pathPoints[_targetPointIndex].position;
 
     private void Start()
     {
-        // ... (Fungsi Start tidak berubah)
         if (pathPoints == null || pathPoints.Length < 2)
         {
             Debug.LogError("Elevator memerlukan setidaknya 2 titik jalur.", this.gameObject);
@@ -43,12 +52,11 @@ public class PointToPointElevator : MonoBehaviour
         InitializeElevator();
     }
 
+    // --- FUNGSI INI DIMODIFIKASI ---
     private void FixedUpdate()
     {
-        // Jika lift tidak diperintahkan bergerak
         if (!MoveToNextPoint)
         {
-            // Pastikan suara berhenti jika lift tiba-tiba dihentikan
             if (_isCurrentlyMoving)
             {
                 AudioManager.instance.StopLoopingSound();
@@ -57,47 +65,86 @@ public class PointToPointElevator : MonoBehaviour
             return;
         }
 
-        // --- LOGIKA BARU: Memulai suara saat pertama kali bergerak ---
         if (!_isCurrentlyMoving)
         {
             if (!string.IsNullOrEmpty(movingSoundName))
             {
                 AudioManager.instance.PlayLoopingSound(movingSoundName);
+
+                Debug.Log("PointToPointElevator: Putar suara 'ElevatorRide'");
             }
             _isCurrentlyMoving = true;
         }
-        // --- AKHIR LOGIKA BARU ---
 
         transform.position = Vector3.MoveTowards(transform.position, CurrentTargetPosition, moveSpeed * Time.deltaTime);
 
-        // Saat lift tiba di tujuan
         if (Vector3.Distance(transform.position, CurrentTargetPosition) < 0.01f)
         {
-            // --- LOGIKA BARU: Hentikan suara saat tiba ---
-            if (_isCurrentlyMoving)
-            {
-                AudioManager.instance.StopLoopingSound();
-                _isCurrentlyMoving = false;
-            }
-            // --- AKHIR LOGIKA BARU ---
+            MoveToNextPoint = false; // Hentikan gerakan sebelum memulai sekuens baru
+            StartCoroutine(ArrivalSequence()); // Mulai sekuens kedatangan
+        }
+    }
 
-            MoveToNextPoint = false;
-            UpdateNextTargetIndex();
-            
+    // --- COROUTINE BARU UNTUK KEDATANGAN ---
+    private IEnumerator ArrivalSequence()
+    {
+        if (_isCurrentlyMoving)
+        {
+            AudioManager.instance.StopLoopingSound();
+            _isCurrentlyMoving = false;
+        }
+
+        // Ambil indeks titik yang baru saja dicapai SEBELUM menentukan target berikutnya.
+        // Variabel _targetPointIndex saat ini masih menunjuk ke tujuan yang baru saja kita capai.
+        int arrivedAtIndex = _targetPointIndex;
+
+        // --- LOGIKA BARU: Cek apakah ini lantai yang rusak ---
+        if (brokenFloorIndex != -1 && arrivedAtIndex == brokenFloorIndex)
+        {
+            Debug.Log("Elevator tiba di lantai rusak (" + arrivedAtIndex + "). Operasi dihentikan.");
+
+            // Disarankan: Putar suara 'listrik mati' atau 'sabotase' di sini.
+            // AudioManager.instance.PlaySFX("ElevatorBrokeSound");
+
+            IsBroken = true; 
+
+            // Tetap buka pintu agar pemain bisa keluar.
             if (doorController != null)
             {
+                AudioManager.instance.PlaySFX(elevatorArriveSoundName);
+                Debug.Log("PointToPointElevator: Putar suara 'ElevatorArrive'");
+
+                yield return new WaitForSeconds(delayAfterArriveSound);
+
                 doorController.OpenDoors();
             }
-            else
-            {
-                Debug.LogWarning("Door Controller tidak terhubung di PointToPointElevator.", this.gameObject);
-            }
+
+            // Hentikan coroutine di sini. Lift tidak akan bisa bergerak lagi karena
+            // kita tidak memanggil UpdateNextTargetIndex().
+            yield break;
+        }
+        // --- AKHIR LOGIKA BARU ---
+
+        // Jika bukan lantai yang rusak, lanjutkan seperti biasa.
+        UpdateNextTargetIndex();
+
+        AudioManager.instance.PlaySFX(elevatorArriveSoundName);
+        Debug.Log("PointToPointElevator: Putar suara 'ElevatorArrive'");
+
+        yield return new WaitForSeconds(delayAfterArriveSound);
+
+        if (doorController != null)
+        {
+            doorController.OpenDoors();
+        }
+        else
+        {
+            Debug.LogWarning("Door Controller tidak terhubung di PointToPointElevator.", this.gameObject);
         }
     }
 
     private void InitializeElevator()
     {
-        // ... (Fungsi InitializeElevator tidak berubah)
         startPointIndex = Mathf.Clamp(startPointIndex, 0, pathPoints.Length - 1);
         transform.position = pathPoints[startPointIndex].position;
         _targetPointIndex = startPointIndex;
@@ -108,7 +155,6 @@ public class PointToPointElevator : MonoBehaviour
 
     private void UpdateNextTargetIndex()
     {
-        // ... (Fungsi UpdateNextTargetIndex tidak berubah)
         if (_targetPointIndex >= pathPoints.Length - 1) _isMovingForward = false;
         else if (_targetPointIndex <= 0) _isMovingForward = true;
 

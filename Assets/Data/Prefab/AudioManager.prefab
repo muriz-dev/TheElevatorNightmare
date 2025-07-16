@@ -437,7 +437,91 @@ MonoBehaviour:
   musicSounds: []
   sfxSounds:
   - name: WalkFootstep
-    clips: []
+    clips:
+    - {fileID: 8300000, guid: 5e95a484edf0950499e174f9d89e84dc, type: 3}
+    - {fileID: 8300000, guid: 7fe8377e60517eb40b1daab5b9c5d639, type: 3}
+    - {fileID: 8300000, guid: f14aaef8fdc7be04a91415ed442c6cb8, type: 3}
+    - {fileID: 8300000, guid: 0ff5be51c512665469ab4d7e9a698fd4, type: 3}
+    - {fileID: 8300000, guid: 4c273e692263ed3409b12c6fe0f181a9, type: 3}
+    - {fileID: 8300000, guid: 3b8ca2b46b3bbdf4ca9f1f3899adf832, type: 3}
+    - {fileID: 8300000, guid: ec3a9a81f224b2042890c2cc0de24505, type: 3}
+    - {fileID: 8300000, guid: ce5eaceff00578a49a0c921c445e7474, type: 3}
+    - {fileID: 8300000, guid: 1165bd97903085b4fbbcf344a98b5110, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
+  - name: RunFootstep
+    clips:
+    - {fileID: 8300000, guid: f76ba78cb09a17b41bf69e8c5df1cdab, type: 3}
+    - {fileID: 8300000, guid: 790289328083d57438bb96e9fc746198, type: 3}
+    - {fileID: 8300000, guid: 6eb8bddd06d85fb48b08b2b59346a39f, type: 3}
+    - {fileID: 8300000, guid: 5836bf32484ce444ea3b090f0fffc4ba, type: 3}
+    - {fileID: 8300000, guid: 680e64aaadf4df44ead88d0baa01c6e3, type: 3}
+    - {fileID: 8300000, guid: 06d33081a59938e4eab3d6e519571dd5, type: 3}
+    - {fileID: 8300000, guid: 83deca37ed5a2f64390226c399d8822a, type: 3}
+    - {fileID: 8300000, guid: 71a180cabb75e304e8fb013957491f0c, type: 3}
+    - {fileID: 8300000, guid: 983850d57ad47d84cae5fea475008b6f, type: 3}
+    - {fileID: 8300000, guid: afe37c1d8d83c6448b0e731761120816, type: 3}
+    - {fileID: 8300000, guid: cd1a7536478353440a6730149d006b54, type: 3}
+    - {fileID: 8300000, guid: 2a57d83d60c141b41bb7d5197f16596d, type: 3}
+    - {fileID: 8300000, guid: f67635b5d786aea4ab00901ab974618e, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
+  - name: ElevatorIntro
+    clips:
+    - {fileID: 8300000, guid: c36ef3cf94aa4a945897fec3b6a5fefe, type: 3}
+    volume: 0.5
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
+  - name: ElevatorOutro
+    clips:
+    - {fileID: 8300000, guid: 0a6f66843d65e0441862aa8638be6e9d, type: 3}
+    volume: 0.5
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
+  - name: ElevatorRide
+    clips:
+    - {fileID: 8300000, guid: 05f3afebc2c52cd49b285f5f5e02649d, type: 3}
+    volume: 1
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
+  - name: ButtonClick
+    clips:
+    - {fileID: 8300000, guid: d77031a56451ee84bb08b48249a91817, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
+  - name: ElevatorArrive
+    clips:
+    - {fileID: 8300000, guid: 29f1807b12bc4d840a48fa15a9e8021e, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
+  - name: DoorHallOpen
+    clips:
+    - {fileID: 8300000, guid: cc37c08c8ce22db43904180434b94350, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
+  - name: TypeWriter
+    clips:
+    - {fileID: 8300000, guid: 0940cfdc29858514f9d5fc74eeb3c8e3, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomVolumeVariance: 0
+    randomPitchVariance: 0
+  - name: OpenYourEyes
+    clips:
+    - {fileID: 8300000, guid: c06b5e82797798649a7cdcc6b48352ef, type: 3}
     volume: 0.7
     pitch: 1
     randomVolumeVariance: 0
