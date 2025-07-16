@@ -8,6 +8,7 @@ TagManager:
   - ElevatorInteract
   - Enemy
   - Canvas
+  - JumpscareCreature
   layers:
   - Default
   - TransparentFX

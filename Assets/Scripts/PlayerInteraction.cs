@@ -29,13 +29,10 @@ public class PlayerInteraction : MonoBehaviour
         RaycastHit hitInfo;
         GameObject currentLookedAtButton = null;
         
-        // --- LOGIKA DEBUG VISUAL DIMULAI DI SINI ---
-        
         bool didHit = Physics.Raycast(ray, out hitInfo, interactionDistance);
 
         if (didHit)
         {
-            // Jika mengenai sesuatu, gambar garis hijau
             Debug.DrawRay(ray.origin, ray.direction * hitInfo.distance, Color.green);
 
             // Cek apakah objek yang dilihat punya tag "ElevatorInteract"
@@ -43,26 +40,31 @@ public class PlayerInteraction : MonoBehaviour
             {
                 currentLookedAtButton = hitInfo.collider.gameObject;
             }
+            else if (hitInfo.collider.CompareTag("JumpscareCreature"))
+            {
+                // Jika kita melihat makhluk, coba panggil fungsinya
+                JumpscareCreature creature = hitInfo.collider.GetComponent<JumpscareCreature>();
+                if (creature != null)
+                {
+                    // Panggil fungsi pada makhluk, yang kemudian akan memberi tahu ElevatorManager
+                    creature.OnPlayerLook();
+                }
+            }
+            // --- LOGIKA BARU SELESAI ---
         }
         else
         {
-            // Jika tidak mengenai apa-apa, gambar garis merah
             Debug.DrawRay(ray.origin, ray.direction * interactionDistance, Color.red);
         }
         
-        // --- LOGIKA DEBUG VISUAL SELESAI ---
-
-
-        // Jika ada perubahan dari apa yang kita lihat sebelumnya
+        // Logika untuk tombol tidak berubah
         if (currentLookedAtButton != _lastLookedAtButton)
         {
-            // Beri tahu manager kita berhenti melihat tombol lama
             if (_lastLookedAtButton != null)
             {
                 elevatorManager.OnLookAwayFromButton(_lastLookedAtButton);
             }
 
-            // Beri tahu manager kita sekarang melihat tombol baru
             if (currentLookedAtButton != null)
             {
                 elevatorManager.OnLookAtButton(currentLookedAtButton);
@@ -74,7 +76,6 @@ public class PlayerInteraction : MonoBehaviour
 
     private void HandleClick()
     {
-        // Jika kita klik saat sedang melihat sebuah tombol
         if (Input.GetMouseButtonDown(0) && _lastLookedAtButton != null)
         {
             elevatorManager.OnButtonPressed(_lastLookedAtButton);
